@@ -1,10 +1,8 @@
-from typing import Sequence
-
-
+from typing import List, Sequence
 from typing import Optional
 from typing import Sequence
 from presidio_analyzer import AnalyzerEngine
-import color
+from color import colorize, AnsiColor
 import argparse
 import yaml
 import textwrap
@@ -21,8 +19,6 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     analyzer = AnalyzerEngine()
 
     all_results = []
-
-    print(args)
 
     returnValue = 0
     language = "en"
@@ -43,28 +39,31 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     if len(all_results) > 0:
         returnValue = 1
-
-        print(
-            textwrap.fill(
-                color.colorize(
-                    'ERROR: Potential sensitive data about to be committed to git repo!',
-                    color.AnsiColor.RED,
-                ),
-                width=80,
-            ),
-        )
-        print()
-
-        for fileResult in all_results:
-            print(textwrap.fill(
-                color.colorize(f'file: {fileResult["filename"]}', color.AnsiColor.BOLD)
-            ))
-            for result in fileResult["results"]:
-                print(textwrap.fill(
-                    color.colorize(f'\t{result}', color.AnsiColor.PURPLE)
-                ))
+        print_results(all_results)
 
     return returnValue
+
+
+def print_results(results: List) -> None:
+    print(
+        textwrap.fill(
+            colorize(
+                'ERROR: Potential sensitive data about to be committed to git repo!',
+                AnsiColor.RED,
+            ),
+            width=80,
+        ),
+    )
+    print()
+
+    for fileResult in results:
+        print(textwrap.fill(
+            colorize(f'file: {fileResult["filename"]}', AnsiColor.BOLD)
+        ))
+        for result in fileResult["results"]:
+            print(textwrap.fill(
+                colorize(f'\t{result}', AnsiColor.PURPLE)
+            ))
 
 
 if __name__ == '__main__':
