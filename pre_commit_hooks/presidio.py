@@ -2,7 +2,8 @@ from typing import List, Sequence
 from typing import Optional
 from typing import Sequence
 from presidio_analyzer import AnalyzerEngine
-from pre_commit_hooks.color import colorize, AnsiColor
+from enum import Enum
+import sys
 import argparse
 import yaml
 import textwrap
@@ -66,5 +67,22 @@ def print_results(results: List) -> None:
             ))
 
 
+class AnsiColor(Enum):
+    RESET = '[0m'
+    BOLD = '[1m'
+    RED = '[91m'
+    RED_BACKGROUND = '[41m'
+    LIGHT_GREEN = '[92m'
+    PURPLE = '[95m'
+
+
+def colorize(text: str, color: AnsiColor) -> str:
+    return '\x1b{}{}\x1b{}'.format(
+        color.value,
+        text,
+        AnsiColor.RESET.value,
+    )
+
+
 if __name__ == '__main__':
-    raise SystemExit(main())
+    raise sys.exit(main())
