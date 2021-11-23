@@ -33,6 +33,7 @@ setup(
     install_requires=[
         'pyyaml',
         'requests',
+        'presidio_analyzer',
     ],
     include_package_data=True,
     extras_require={
