@@ -35,6 +35,7 @@ setup(
         'requests',
         'presidio_analyzer',
         'presidio_anonymizer',
+        'en_core_web_lg'
     ],
     include_package_data=True,
     extras_require={
