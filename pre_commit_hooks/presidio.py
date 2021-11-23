@@ -23,7 +23,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     returnValue = 0
     language = "en"
-    entities = ["PHONE_NUMBER"]
+    entities = []
 
     if args.config:
         try:

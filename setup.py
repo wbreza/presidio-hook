@@ -36,6 +36,7 @@ setup(
         'presidio_analyzer',
         'presidio_anonymizer',
         'spacy',
+        'termcolor',
         'en_core_web_lg @ https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.2.0/en_core_web_lg-3.2.0.tar.gz'
     ],
     include_package_data=True,
