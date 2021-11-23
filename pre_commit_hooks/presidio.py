@@ -31,16 +31,20 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 config_data = yaml.load(config, yaml.FullLoader)
                 language = config_data["language"]
                 entities = config_data["entities"]
-        except Exception as e:
+                print(colored(f'Using Presidio config from from {args.config}', 'cyan'))
+        except:
             print(colored(f'Presidio config file not found at {args.config}. Using defaults', 'yellow', attrs=['bold']))
             print()
 
     for filename in args.filenames:
-        with open(filename) as f:
-            text = f.read()
-            results = analyzer.analyze(text=text, entities=entities, language=language)
-            if len(results) > 0:
-                all_results.append(dict(filename=filename, results=results))
+        try:
+            with open(filename) as f:
+                text = f.read()
+                results = analyzer.analyze(text=text, entities=entities, language=language)
+                if len(results) > 0:
+                    all_results.append(dict(filename=filename, results=results))
+        except:
+            print(colored(f'Error analyzing {filename} for sensitive data'))
 
     if len(all_results) > 0:
         returnValue = 1
