@@ -2,7 +2,7 @@ from typing import List, Sequence
 from typing import Optional
 from typing import Sequence
 from presidio_analyzer import AnalyzerEngine
-from color import colorize, AnsiColor
+from pre_commit_hooks.color import colorize, AnsiColor
 import argparse
 import yaml
 import textwrap
