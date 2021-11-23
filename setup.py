@@ -34,6 +34,7 @@ setup(
         'pyyaml',
         'requests',
         'presidio_analyzer',
+        'presidio_anonymizer',
     ],
     include_package_data=True,
     extras_require={
