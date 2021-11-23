@@ -1,0 +1,7 @@
+-   id: presidio
+    name: Detect sensitive data
+    description: Detects sensitive data stored in files
+    entry: presidio-hook
+    language: python
+    files: .*
+    types: [text]
