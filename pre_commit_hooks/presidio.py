@@ -15,7 +15,6 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     # Set up the engine, loads the NLP module (spaCy model by default) 
     # and other PII recognizers
-    spacy.load('en_core_web_lg')
     analyzer = AnalyzerEngine()
 
     text="My phone number is 212-555-5555"
