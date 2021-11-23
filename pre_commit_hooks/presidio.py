@@ -6,6 +6,7 @@ from typing import Sequence
 from presidio_analyzer import AnalyzerEngine
 from presidio_anonymizer import AnonymizerEngine
 import argparse
+import spacy
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = argparse.ArgumentParser()
@@ -14,6 +15,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     # Set up the engine, loads the NLP module (spaCy model by default) 
     # and other PII recognizers
+    spacy.load('en_core_web_lg')
     analyzer = AnalyzerEngine()
 
     text="My phone number is 212-555-5555"
