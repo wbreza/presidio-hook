@@ -35,7 +35,8 @@ setup(
         'requests',
         'presidio_analyzer',
         'presidio_anonymizer',
-        'en_core_web_lg'
+        'spacy',
+        'en_core_web_lg @ https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.2.0/en_core_web_lg-3.2.0.tar.gz'
     ],
     include_package_data=True,
     extras_require={
