@@ -4,7 +4,7 @@ from typing import Sequence
 from typing import Optional
 from typing import Sequence
 from presidio_analyzer import AnalyzerEngine
-from util import color
+import color
 import argparse
 import yaml
 import textwrap
@@ -38,7 +38,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         with open(filename) as f:
             text = f.read()
             results = analyzer.analyze(text=text, entities=entities, language=language)
-            all_results.append(dict(filename=filename, results=results))
+            if len(results) > 0:
+                all_results.append(dict(filename=filename, results=results))
 
     if len(all_results) > 0:
         returnValue = 1
