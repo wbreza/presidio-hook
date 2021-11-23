@@ -1,8 +1,0 @@
-language: en
-
-entities:
-  - CREDIT_CARD
-  - EMAIL_ADDRESS
-  - PHONE_NUMBER
-  - PERSON
-  - US_SSN

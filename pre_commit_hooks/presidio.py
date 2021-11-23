@@ -3,10 +3,10 @@ from typing import Optional
 from typing import Sequence
 from presidio_analyzer import AnalyzerEngine
 from enum import Enum
+from termcolor import colored
 import sys
 import argparse
 import yaml
-import textwrap
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -25,11 +25,15 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     language = "en"
     entities = ["PHONE_NUMBER"]
 
-    if args.config != "":
-        with open(args.config) as config:
-            config_data = yaml.load(config, yaml.FullLoader)
-            language = config_data["language"]
-            entities = config_data["entities"]
+    if args.config:
+        try:
+            with open(args.config) as config:
+                config_data = yaml.load(config, yaml.FullLoader)
+                language = config_data["language"]
+                entities = config_data["entities"]
+        except Exception as e:
+            print(colored(f'Presidio config file not found at {args.config}. Using defaults', 'yellow', attrs=['bold']))
+            print()
 
     for filename in args.filenames:
         with open(filename) as f:
@@ -46,42 +50,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
 
 def print_results(results: List) -> None:
-    print(
-        textwrap.fill(
-            colorize(
-                'ERROR: Potential sensitive data about to be committed to git repo!',
-                AnsiColor.RED,
-            ),
-            width=80,
-        ),
-    )
-    print()
+    print(colored('ERROR: Potential sensitive data about to be committed to git repo!', 'red'))
 
     for fileResult in results:
-        print(textwrap.fill(
-            colorize(f'file: {fileResult["filename"]}', AnsiColor.BOLD)
-        ))
+        print(colored(f'file: {fileResult["filename"]}', 'cyan', attrs=["bold"]))
         for result in fileResult["results"]:
-            print(textwrap.fill(
-                colorize(f'\t{result}', AnsiColor.PURPLE)
-            ))
-
-
-class AnsiColor(Enum):
-    RESET = '[0m'
-    BOLD = '[1m'
-    RED = '[91m'
-    RED_BACKGROUND = '[41m'
-    LIGHT_GREEN = '[92m'
-    PURPLE = '[95m'
-
-
-def colorize(text: str, color: AnsiColor) -> str:
-    return '\x1b{}{}\x1b{}'.format(
-        color.value,
-        text,
-        AnsiColor.RESET.value,
-    )
+            print(colored(f' - {result}', 'magenta'))
 
 
 if __name__ == '__main__':
