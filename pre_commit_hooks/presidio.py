@@ -25,7 +25,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     language = "en"
     entities = []
 
-    if args.config:
+    if args.config is not None:
         try:
             with open(args.config) as config:
                 config_data = yaml.load(config, yaml.FullLoader)
@@ -35,6 +35,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         except:
             print(colored(f'Presidio config file not found at {args.config}. Using defaults', 'yellow', attrs=['bold']))
             print()
+    else:
+        print(colored(f'Presidio config file not set. Using defaults', 'yellow', attrs=['bold']))
+        print()
 
     for filename in args.filenames:
         try:
