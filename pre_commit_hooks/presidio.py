@@ -1,7 +1,7 @@
 from typing import List, Sequence
 from typing import Optional
 from typing import Sequence
-from presidio_analyzer import AnalyzerEngine
+from presidio_analyzer import AnalyzerEngine, RecognizerRegistry, PatternRecognizer
 from enum import Enum
 from termcolor import colored
 from globmatch import glob_match
@@ -41,14 +41,19 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         print()
 
     config = {
-        "language": config_data["language"] or "en",
-        "entities": config_data["entities"] or [],
-        "ignore": config_data["ignore"] or [],
+        "language": ("language" in config_data and config_data["language"]) or "en",
+        "entities": ("entities" in config_data and config_data["entities"]) or [],
+        "ignore": ("ignore" in config_data and config_data["ignore"]) or [],
+        "recognizers": ("recognizers" in config_data and config_data["recognizers"]) or []
     }
 
-    # Set up the engine, loads the NLP module (spaCy model by default)
-    # and other PII recognizers
     analyzer = AnalyzerEngine()
+
+    # Load custom pattern recognizers
+    for recognizer in config["recognizers"]:
+        pattern_recognizer = PatternRecognizer.from_dict(recognizer)
+        analyzer.registry.add_recognizer(pattern_recognizer)
+
     all_results = []
 
     for filename in args.filenames:
@@ -56,9 +61,15 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             with open(filename) as f:
                 if not glob_match(filename, config["ignore"]):
                     text = f.read()
-                    results = analyzer.analyze(text=text, entities=config["entities"], language=config["language"])
+                    results = analyzer.analyze(
+                        text=text,
+                        entities=config["entities"],
+                        language=config["language"]
+                    )
+
                     if len(results) > 0:
                         all_results.append(dict(filename=filename, results=results))
+
         except Exception as e:
             print(colored(f'Error analyzing {filename} for sensitive data. Error: {e}', 'red'))
 
