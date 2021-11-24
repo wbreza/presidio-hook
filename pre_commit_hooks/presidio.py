@@ -11,15 +11,18 @@ import yaml
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument('filenames', nargs='*')
-    parser.add_argument('--config', dest="config", help="The presidio configuration")
+    parser.add_argument(
+        'filenames',
+        nargs='*',
+        help="Filenames pre-commit believes are changed"
+    )
+    parser.add_argument(
+        '--config',
+        dest="config",
+        default="./presidio.yaml",
+        help="The presidio configuration"
+    )
     args = parser.parse_args(argv)
-
-    # Set up the engine, loads the NLP module (spaCy model by default)
-    # and other PII recognizers
-    analyzer = AnalyzerEngine()
-
-    all_results = []
 
     returnValue = 0
     language = "en"
@@ -38,6 +41,11 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     else:
         print(colored(f'Presidio config file not set. Using defaults', 'yellow', attrs=['bold']))
         print()
+
+    # Set up the engine, loads the NLP module (spaCy model by default)
+    # and other PII recognizers
+    analyzer = AnalyzerEngine()
+    all_results = []
 
     for filename in args.filenames:
         try:
